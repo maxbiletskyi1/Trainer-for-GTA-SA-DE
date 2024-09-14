@@ -25,3 +25,11 @@ export const makeCarInvincible = (car: Car) => {
         .setCanBurstTires(false)
         .setProofs(true, true, true, true, true);
 }
+// Changes Max Biletskyi: adding makeCarVulnerable()
+export const makeCarVulnerable = (car: Car) => {
+    return car.setCanBeDamaged(true)
+        .setPetrolTankWeakpoint(true)
+        .setCanBeVisiblyDamaged(true)
+        .setCanBurstTires(true)
+        .setProofs(false, false, false, false, false);
+}

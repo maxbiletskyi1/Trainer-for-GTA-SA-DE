@@ -7,6 +7,8 @@ import {
     getPositionInFrontOfChar,
     getCurrentCar,
     makeCarInvincible,
+    // Changes Max Biletskyi: adding makeCarVulnerable
+    makeCarVulnerable,
 } from '../functions/index';
 
 import { CarColorMenu, CarModMenu, CarPaintJobMenu, renderCarList } from '../sub-menus/index';
@@ -72,9 +74,16 @@ export class CarTab extends PlayerTab {
             car.fix();
         }
 
+        //Checkbox control
+        
         this.currentCarInvincible = ImGui.Checkbox('Invincible', this.currentCarInvincible);
+
+        // Changes Max Biletskyi: adding makeCarVulnerable()
         if (this.currentCarInvincible) {
             makeCarInvincible(car);
+        }
+        else{
+            makeCarVulnerable(car);
         }
 
         this.carModMenu.renderCarModList(car, MOD_BUTTON_SIZE);
@@ -85,15 +94,18 @@ export class CarTab extends PlayerTab {
 
     private spawnCar(modelId: number) {
         loadModel(modelId);
+        
+        // Changes Max Biletskyi: removing this.lastSpawnedCar?.delete();
+        //this.lastSpawnedCar?.delete();
 
-        this.lastSpawnedCar?.delete();
-
-        this.currentCar = makeCarInvincible(
+        // Changes Max Biletskyi: adding makeCarVulnerable(), removing makeCarInvincible(...)
+        this.currentCar = 
             Car.Create(modelId, this.playerPos.x, this.playerPos.y, this.playerPos.z)
                 .lockDoors(CarLock.NotUsed)
-                .markAsNoLongerNeeded(),
-        );
-        this.currentCarInvincible = true;
+                .markAsNoLongerNeeded();
+
+        // Changes Max Biletskyi: setting this.currentCarInvincible = false;
+        this.currentCarInvincible = false;
         this.lastSpawnedCar = this.currentCar;
 
         Streaming.MarkModelAsNoLongerNeeded(modelId);
